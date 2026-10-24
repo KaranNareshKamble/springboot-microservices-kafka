@@ -1,0 +1,16 @@
+# Maven build output
+**/target/
+
+# IDE files
+**/.classpath
+**/.project
+**/.settings/
+**/.idea/
+**/*.iml
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+**/application-local.properties
+**/application-local.yml

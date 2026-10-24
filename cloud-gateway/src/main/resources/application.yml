@@ -1,0 +1,78 @@
+server:
+    port: 9191
+
+spring:
+    application:
+        name: API-GATEWAY
+
+    cloud:
+        gateway:
+            server:
+                webmvc:
+                    routes:
+                        - id: USER-SERVICE
+                          uri: lb://USER-SERVICE
+                          predicates:
+                              - Path=/users/**
+                          filters:
+                              - name: CircuitBreaker
+                                args:
+                                    id: userServiceCircuitBreaker
+                                    name: userServiceCircuitBreaker
+                                    fallbackUri: forward:/userServiceFallback
+                        #                                    statusCodes: 500
+
+                        - id: DEPARTMENT-SERVICE
+                          uri: lb://DEPARTMENT-SERVICE
+                          predicates:
+                              - Path=/departments/**
+                          filters:
+                              - name: CircuitBreaker
+                                args:
+                                    id: departmentServiceCircuitBreaker
+                                    name: departmentServiceCircuitBreaker
+                                    fallbackUri: forward:/departmentServiceFallback
+#                                    statusCodes: 500
+
+resilience4j:
+    circuitbreaker:
+        instances:
+            userServiceCircuitBreaker:
+                registerHealthIndicator: true
+                slidingWindowType: COUNT_BASED
+                slidingWindowSize: 10
+                minimumNumberOfCalls: 5
+                failureRateThreshold: 50
+                waitDurationInOpenState: 10s
+                permittedNumberOfCallsInHalfOpenState: 3
+
+            departmentServiceCircuitBreaker:
+                registerHealthIndicator: true
+                slidingWindowType: COUNT_BASED
+                slidingWindowSize: 10
+                minimumNumberOfCalls: 5
+                failureRateThreshold: 50
+                waitDurationInOpenState: 10s
+                permittedNumberOfCallsInHalfOpenState: 3
+
+#eureka:
+#    client:
+#        register-with-eureka: true
+#        fetch-registry: true
+#        service-url:
+#            defaultZone: http://localhost:8761/eureka
+#    instance:
+#        hostname: localhost
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info,metrics,prometheus
+    endpoint:
+        health:
+            show-details: always
+
+    health:
+        circuitbreakers:
+            enabled: true
