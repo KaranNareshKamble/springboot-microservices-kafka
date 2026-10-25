@@ -11,6 +11,12 @@ spring:
             key-serializer: org.apache.kafka.common.serialization.StringSerializer
             value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+            
+            
+jwt:
+  secret: ${JWT_SECRET}
+
+           
 #eureka:
 #  client:
 #    register-with-eureka: true

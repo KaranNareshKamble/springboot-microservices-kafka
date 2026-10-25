@@ -3,6 +3,7 @@ package com.knk.user.service;
 import java.time.Instant;
 
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,31 +24,32 @@ public class UserService {
 	private final UserRepo userRepo;
 	private final RestTemplate restTemplate;
 	private final KafkaTemplate<String, UserCreatedEvent> kafkaTemplate;
+	private final PasswordEncoder passwordEncoder;
 
 	public User addUser(User user) {
 		// TODO Auto-generated method stub
 		log.info("################################# addUser");
-
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		User savedUser= userRepo.save(user);
 		
 		UserCreatedEvent userCreatedEvent= new UserCreatedEvent(
 				savedUser.getUserId(), savedUser.getUserName(),
 				savedUser.getDepartmentId(), Instant.now()
 				);
-log.info("#######################################before kafka send");
-		
-kafkaTemplate.send(USER_EVENT_TOPIC, userCreatedEvent).whenComplete((result, ex)->{
-	if(ex!=null) {
-		log.info("#####Error in Kafka send#####");
-	}else {
-		log.info("Kafka send successfully: topic:{}, partition:{}, offset:{} ",
-				result.getRecordMetadata().topic(), result.getRecordMetadata().partition(),
-				result.getRecordMetadata().offset());
-	}
-});
-
-
-log.info("########################################after kafka send");
+//log.info("#######################################before kafka send");
+//		
+//kafkaTemplate.send(USER_EVENT_TOPIC, userCreatedEvent).whenComplete((result, ex)->{
+//	if(ex!=null) {
+//		log.info("#####Error in Kafka send#####");
+//	}else {
+//		log.info("Kafka send successfully: topic:{}, partition:{}, offset:{} ",
+//				result.getRecordMetadata().topic(), result.getRecordMetadata().partition(),
+//				result.getRecordMetadata().offset());
+//	}
+//});
+//
+//
+//log.info("########################################after kafka send");
 		return savedUser;
 	}
 
