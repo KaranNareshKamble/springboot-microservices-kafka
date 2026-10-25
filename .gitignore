@@ -8,7 +8,7 @@
 **/.idea/
 **/*.iml
 
-# Local environment and secrets
+# Local environment and secrets property files
 .env
 .env.*
 !.env.example
