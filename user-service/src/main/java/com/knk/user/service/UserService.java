@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.knk.user.dto.UserCreatedEvent;
 import com.knk.user.entity.User;
+import com.knk.user.exception.ResourceNotFoundException;
 import com.knk.user.repository.UserRepo;
 import com.knk.user.vo.Department;
 import com.knk.user.vo.ResponseTempVO;
@@ -55,7 +56,9 @@ public class UserService {
 
 	public User getByID(Long id) {
 		// TODO Auto-generated method stub
-		return userRepo.findByUserId(id);
+		User u= userRepo.findById(id).orElseThrow(()->
+		new ResourceNotFoundException("User Not Found for ID: "+id));
+		return u;
 	}
 
 	public ResponseTempVO getUserWithDepartment(Long userId) {

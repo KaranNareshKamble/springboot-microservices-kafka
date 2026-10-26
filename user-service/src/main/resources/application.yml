@@ -12,9 +12,9 @@ spring:
             value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
             
-            
+           
 jwt:
-  secret: ${JWT_SECRET}
+  secret: "kr6603VYIM7ut4z4VbLSisL6MmfsaYj48Ie2300fhGo"
 
            
 #eureka:
