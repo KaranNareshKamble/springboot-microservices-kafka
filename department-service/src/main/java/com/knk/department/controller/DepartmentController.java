@@ -1,5 +1,7 @@
 package com.knk.department.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,15 +24,19 @@ public class DepartmentController {
 	private final DepartmentService departmentService;
 	
 	@PostMapping("/")
-	public Department saveDepartment(@RequestBody Department department) {
+	public ResponseEntity<Department>  saveDepartment(@RequestBody Department department) {
 		log.info("inside saveDepartment controller ");
-		return departmentService.saveDepartment(department);
+//		return departmentService.saveDepartment(department);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(departmentService.saveDepartment(department));
 	}
 
 	
 	@GetMapping("/{id}")
-	public Department findDepartmentById(@PathVariable("id") Long id) {
+	public ResponseEntity<Department> findDepartmentById(@PathVariable("id") Long id) {
 		log.info("2 inside findDepartmentById controller ");
-		return departmentService.findDepartmentById(id);
+//		return departmentService.findDepartmentById(id);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(departmentService.findDepartmentById(id));
 	}
 }

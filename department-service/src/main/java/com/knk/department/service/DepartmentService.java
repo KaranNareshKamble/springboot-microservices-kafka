@@ -1,10 +1,13 @@
 package com.knk.department.service;
 
+import java.util.Optional;
+
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.knk.department.dto.UserCreatedEvent;
 import com.knk.department.entity.Department;
+import com.knk.department.exception.ResourceNotFoundException;
 import com.knk.department.repository.DepartmentRepo;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +29,10 @@ public class DepartmentService {
 
 	public Department findDepartmentById(Long id) {
 		// TODO Auto-generated method stub
-		return departmentRepo.findByDepartmentId(id);
+		Department d= departmentRepo.findById(id).orElseThrow(
+				()-> new ResourceNotFoundException("Department Not Found with ID: "+id));
+				
+		return d;
 	}
 	
 	@KafkaListener(topics = "user-events",  groupId = "department-service-group")

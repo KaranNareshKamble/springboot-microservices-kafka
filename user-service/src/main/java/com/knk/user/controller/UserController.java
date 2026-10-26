@@ -1,5 +1,7 @@
 package com.knk.user.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +25,18 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/")
-	public User addUser(@RequestBody User user) {
-		return userService.addUser(user);
+	public ResponseEntity<User> addUser(@RequestBody User user) {
+//		return userService.addUser(user);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(userService.addUser(user));
 	}
 	
 	@GetMapping("/{id}")
-	public User getUserById(@PathVariable("id") Long id) {
-		return userService.getByID(id);
+	public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+//		return userService.getByID(id);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(userService.getByID(id));
+		
 	}
 	
 	@GetMapping("/userAndDepById/{id}")
