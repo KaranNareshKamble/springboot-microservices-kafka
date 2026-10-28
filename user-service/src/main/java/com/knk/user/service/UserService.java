@@ -2,14 +2,17 @@ package com.knk.user.service;
 
 import java.time.Instant;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.knk.user.dto.UserCreatedEvent;
+import com.knk.user.entity.Admin;
 import com.knk.user.entity.User;
 import com.knk.user.exception.ResourceNotFoundException;
+import com.knk.user.repository.AdminRepo;
 import com.knk.user.repository.UserRepo;
 import com.knk.user.vo.Department;
 import com.knk.user.vo.ResponseTempVO;
@@ -26,6 +29,7 @@ public class UserService {
 	private final RestTemplate restTemplate;
 	private final KafkaTemplate<String, UserCreatedEvent> kafkaTemplate;
 	private final PasswordEncoder passwordEncoder;
+	private final AdminRepo adminRepo;
 
 	public User addUser(User user) {
 		// TODO Auto-generated method stub
@@ -71,6 +75,21 @@ public class UserService {
 		vo.setDepartment(d);
 		return vo;
 	}
+
+	public Admin addAdmin(Admin adminInfo) {
+		// TODO Auto-generated method stub
+		Admin savedAdmin=adminRepo.save(adminInfo);
+		return savedAdmin;
+	}
+
+	public Admin getAdminById(Long id) {
+		// TODO Auto-generated method stub
+		Admin admin=adminRepo.findById(id).orElseThrow(()->
+		new ResourceNotFoundException("Admin does not exist for ID: "+id));
+		return admin;
+	}
+
+
 	
 
 }

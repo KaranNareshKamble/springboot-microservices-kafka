@@ -38,8 +38,9 @@ public class SecurityConfig {
 	                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
 	            )
 	        )
-		.authorizeHttpRequests(auth->auth.requestMatchers("/auth/**").permitAll()
-				.requestMatchers(HttpMethod.POST, "/users/").permitAll()
+		.authorizeHttpRequests(auth->auth
+				.requestMatchers("/auth/**").permitAll()
+				.requestMatchers(HttpMethod.POST, "/users/**").permitAll()
 				.anyRequest().authenticated())
 		.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
