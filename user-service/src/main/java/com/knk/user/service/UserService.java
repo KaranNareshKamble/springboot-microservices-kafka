@@ -67,6 +67,7 @@ public class UserService {
 
 	public ResponseTempVO getUserWithDepartment(Long userId) {
 		// TODO Auto-generated method stub
+		
 		ResponseTempVO vo= new ResponseTempVO();
 		User u=userRepo.findByUserId(userId);
 		Department d= restTemplate.getForObject("http://DEPARTMENT-SERVICE/departments/"+u.getDepartmentId()
