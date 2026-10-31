@@ -4,30 +4,43 @@ server:
 spring:
     application:
         name: DEPARTMENT-SERVICE
+    servlet:
+        multipart:
+            max-file-size: 5MB
+            max-request-size: 5MB
+    autoconfigure:
+        exclude:
+            - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+    cloud:
+        discovery:
+            enabled: false
 
-    kafka:
-        bootstrap-servers: localhost:9092
-        producer:
-            key-serializer: org.apache.kafka.common.serialization.StringSerializer
-            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
-        consumer:
-            group-id: department-service-group
-            auto-offset-reset: earliest
-            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-            properties:
-                "[spring.json.trusted.packages]": com.knk.department.dto
-                "[spring.json.use.type.headers]": false
-                "[spring.json.value.default.type]": com.knk.department.dto.UserCreatedEvent
-
-management:
-    tracing:
-        sampling:
-            probability: 1.0
-        export:
-            zipkin:
-                endpoint: http://localhost:9411/api/v2/spans
+#    kafka:
+#        bootstrap-servers: localhost:9092
+#        producer:
+#            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#
+#        consumer:
+#            group-id: department-service-group
+#            auto-offset-reset: earliest
+#            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#            properties:
+#                "[spring.json.trusted.packages]": com.knk.department.dto
+#                "[spring.json.use.type.headers]": false
+#                "[spring.json.value.default.type]": com.knk.department.dto.UserCreatedEvent
+#
+#management:
+#    tracing:
+#        sampling:
+#            probability: 1.0
+#        export:
+#            zipkin:
+#                endpoint: http://localhost:9411/api/v2/spans
+#
+file:
+    upload-directory: C:\Users\win 10\Documents\fileStorage\
 
 #eureka:
 #  client:
@@ -39,3 +52,6 @@ management:
 #  instance:
 #    hostname: localhost
 
+eureka:
+    client:
+        enabled: false
